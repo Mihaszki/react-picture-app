@@ -12,6 +12,26 @@ const postSchema = Joi.object({
   file: Joi.any(),
 });
 
+const getUserIdFromJWT = (req) => {
+  try {
+    const authHeader = req.headers.authorization;
+    let user = '';
+
+    if (authHeader) {
+      const token = authHeader.split(' ')[1];
+      jwt.verify(token, process.env.TOKEN_SECRET, (err, id) => {
+        if (!err) {
+          user = id._id;
+        }
+      });
+    }
+    return user;
+  }
+  catch {
+    return '';
+  }
+};
+
 router.post('/', jwtAuth, async (req, res) => {
   const { error } = postSchema.validate(req.body);
   if (error) return res.status(400).send({ message: error.details[0].message, success: false });
@@ -47,12 +67,13 @@ router.post('/', jwtAuth, async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
+  const user = getUserIdFromJWT(req);
   try {
-    const posts = await Post.find();
-    res.send(posts);
+    const posts = await Post.find().sort({ createdAt: -1 });
+    res.status(200).send({ posts, message: 'Success!', success: true, callerId: user });
   }
   catch (err) {
-    res.status(400).send({ error: err, message: 'There was an error!', success: false });
+    res.status(400).send({ error: err, message: 'There was an error!', success: false, callerId: user });
   }
 });
 
@@ -61,17 +82,7 @@ router.get('/:id', async (req, res) => {
     const post = await Post.findById(req.params.id);
     if (!post) res.status(400).send({ message: 'Post not found!', success: false });
 
-    const authHeader = req.headers.authorization;
-    let user = '';
-
-    if (authHeader) {
-      const token = authHeader.split(' ')[1];
-      jwt.verify(token, process.env.TOKEN_SECRET, (err, id) => {
-        if (!err) {
-          user = id._id;
-        }
-      });
-    }
+    const user = getUserIdFromJWT(req);
 
     const comments = await Comment.aggregate([
       { '$match': { postId: req.params.id } },
@@ -97,7 +108,7 @@ router.get('/:id', async (req, res) => {
       },
     ]);
 
-    res.send({ success: true, message: 'Success', post, comments });
+    res.send({ success: true, message: 'Success', post, comments, callerId: user });
   }
   catch (err) {
     res.status(400).send({ error: err, message: 'There was an error!', success: false });

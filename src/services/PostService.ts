@@ -32,3 +32,7 @@ export async function editComment(id: string, postId: string, text: string) {
 export async function likePost(postId: string) {
   return await fetch(`${API_URL}like`, { body: JSON.stringify({postId}), method: 'POST', headers: generateHeaders() });
 }
+
+export async function removeLike(postId: string) {
+  return await fetch(`${API_URL}like`, { body: JSON.stringify({postId}), method: 'DELETE', headers: generateHeaders() });
+}
