@@ -15,6 +15,7 @@ const LikesButton = (props: Props) => {
 
   useEffect(() => {
     setIsLikedLocal(props.isLiked);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const addLike = async () => {

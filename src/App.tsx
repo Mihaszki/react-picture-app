@@ -12,7 +12,6 @@ function App() {
     <main className="text-gray-900">
       <UserContextProvider>
         <Routes>
-          <Route path='/' element={<Home />} />
           <Route path='/view/:id' element={<View />} />
           <Route path='/upload' element={
             <ProtectedRoute mustBeLoggedIn={true} redirectPath="/login" outlet={<UploadPage />} />
@@ -23,6 +22,7 @@ function App() {
           <Route path='/login' element={
             <ProtectedRoute mustBeLoggedIn={false} redirectPath="/" outlet={<Login />} />
           } />
+          <Route path='/' element={<Home />} />
         </Routes>
       </UserContextProvider>
     </main>
