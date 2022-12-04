@@ -1,6 +1,8 @@
 # PictureApp
 App created to share your photos. You can register and upload photos. You can add, edit or delete your comments. You can like other images. Created with React, TailwindCSS, Express.js and MongoDB.
 
+![App Demo](demo/app_demo.gif)
+
 ## Setup
 
 ### Frontend
