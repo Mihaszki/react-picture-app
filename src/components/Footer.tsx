@@ -13,7 +13,7 @@ const Footer = ({sticky = false}: {sticky?: boolean}) => {
     <span className="text-sm text-gray-500 sm:text-center">ReactPictureApp</span>
     <ul className="flex flex-wrap items-center mt-3 text-sm text-gray-500 sm:mt-0">
         <li>
-            <a href="#/" className="mr-4 hover:underline md:mr-6 ">Source Code</a>
+            <a href="https://github.com/Mihaszki/react-picture-app" target={"_blank"} rel="noopener noreferrer" className="mr-4 hover:underline md:mr-6 ">Source Code</a>
         </li>
     </ul>
 </footer>
